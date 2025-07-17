@@ -33,7 +33,7 @@ export default function LoginForm() {
 <div>
     <div className="p-6">
       
-      <Link href="/product-category" className="text-blue-500 underline">
+      <Link href="/user-profile" className="text-blue-500 underline">
         Go to Product Categories
       </Link>
     </div>

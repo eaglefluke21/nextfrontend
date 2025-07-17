@@ -1,11 +1,10 @@
-// app/api/login/route.js
-import { cookies } from 'next/headers'; // for setting HttpOnly cookie
 import { NextResponse } from 'next/server';
 
 const baseurl = process.env.PHP_LOCAL_SITE_URL;
 const appId = process.env.APP_ID;
 
 export async function POST(req) {
+  try{
   const body = await req.json();
 
   const res = await fetch(`${baseurl}/v1/user/login`, {
@@ -28,7 +27,7 @@ export async function POST(req) {
   if (resData.data.access_token) {
     response.cookies.set('shopio', resData.data.access_token, {
       httpOnly: true,
-      secure: false, // Must be false on localhost
+      secure: false, 
       path: '/',
       maxAge: 60 * 60 * 24,
       sameSite: 'Lax'
@@ -36,4 +35,8 @@ export async function POST(req) {
   }
 
   return response;
+}catch(err) 
+{
+  return NextResponse.json({ message: `Login Failed: ${err}` }, { status: 500 });
+}
 }

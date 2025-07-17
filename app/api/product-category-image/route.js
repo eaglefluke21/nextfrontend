@@ -13,7 +13,7 @@ export async function GET(request) {
 
     const { searchParams } = new URL(request.url);
     const id = searchParams.get("id");
-    const res = await fetch(`${baseurl}/v1/tenant/categories`, {
+    const res = await fetch(`${baseurl}/v1/tenant/category-image/${id}`, {
       headers: {
         Authorization:`Bearer ${token}`,
         "app-id": appId,

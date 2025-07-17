@@ -7,7 +7,7 @@ export default function Home() {
    <div className="p-6">
     
       <Link href="/login" className="text-green-500 underline">
-        Go to Home page
+       Login page
       </Link>
     </div>
      <div className="p-6">
