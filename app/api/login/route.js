@@ -14,7 +14,7 @@ export async function POST(req) {
         'app-id':appId },
      credentials: 'include',
     body: JSON.stringify(body),
-  });
+  }); 
     if (!res.ok) {
       const errorText = await res.text();
       throw new Error(`HTTP Error ${res.status}: ${errorText}`);
@@ -24,8 +24,17 @@ export async function POST(req) {
 
   const response = NextResponse.json(resData);
 
-  if (resData.data.access_token) {
+  if (resData.data.access_token && resData.data.refresh_token) {
+    console.log("log data",resData.data.refresh_token);
     response.cookies.set('shopio', resData.data.access_token, {
+      httpOnly: true,
+      secure: false, 
+      path: '/',
+      maxAge: 60 * 60 * 24,
+      sameSite: 'Lax'
+    });
+
+    response.cookies.set('shopio_refresh', resData.data.refresh_token, {
       httpOnly: true,
       secure: false, 
       path: '/',

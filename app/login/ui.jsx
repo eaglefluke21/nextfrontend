@@ -34,7 +34,7 @@ export default function LoginForm() {
     <div className="p-6">
       
       <Link href="/user-profile" className="text-blue-500 underline">
-        Go to Product Categories
+        Go to User Profile
       </Link>
     </div>
     <div>
