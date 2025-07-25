@@ -47,6 +47,14 @@ export default function LoginForm() {
   }
 
   return (
+
+<div>
+    <div className="p-6">
+      
+      <Link href="/user-profile" className="text-blue-500 underline">
+        Go to User Profile
+      </Link>
+    </div>
     <div>
       <div className="p-6">
         <Link href="/user-profile" className="text-blue-500 underline">
