@@ -12,7 +12,7 @@ export default async function CreateCategory(formData) {
      const token = cookieStore.get("shopio")?.value;
     
       if (!token) {
-        return NextResponse.json({ message: "Token not found" }, { status: 401 });
+        return {error : "unauthorized token: please log in"};
       }
     
       formData.append("parent_id", "");
@@ -26,9 +26,6 @@ export default async function CreateCategory(formData) {
         body: formData,
       });
 
-      console.log("formdata",formData);
-
-
     const resData = await res.json();
 
     console.log('response',resData);
@@ -36,7 +33,7 @@ export default async function CreateCategory(formData) {
     if (res.ok && resData) {
       redirect('/product-category')
     } else {
-      console.log(resData.message, "Something went wrong");
+        return {error : "issue occured: please try again"};
     }
   };
 

@@ -1,7 +1,7 @@
 'use client';
 import { useEffect } from "react";
 
-export default function ProductCategoryUI({ data }) {
+export default function ProductCategoryUI({ data , error }) {
   useEffect(() => {
     console.log("data outside", data);
 
@@ -22,6 +22,17 @@ export default function ProductCategoryUI({ data }) {
   }, [data]);
 
   return (
-    <pre>{JSON.stringify(data, null, 2)}</pre>
+    <div>
+      {error && 
+<span className="text-red-500">
+  {error}
+</span>
+      }
+
+{data.length > 0 &&
+<pre>{JSON.stringify(data, null, 2)}</pre>
+   
+}
+ </div>
   );
 }

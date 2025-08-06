@@ -1,13 +1,17 @@
 'use client';
 
-export default function ProductCategoryUI({ data }) {
+export default function ProductCategoryUI({ data ,error }) {
   return (
     <div className="mt-4">
-      {data && (
-        <pre className="bg-gray-900 p-4 rounded text-sm overflow-x-auto">
+
+      <span className="text-red-500">
+        {error}
+      </span>
+    
+        <pre>
           {JSON.stringify(data, null, 2)}
         </pre>
-      )}
+  
     </div>
   );
 }

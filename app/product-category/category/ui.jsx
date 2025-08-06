@@ -1,10 +1,17 @@
 "use client";
 
+import { useActionState } from "react";
+import CreateCategory from "./action";
+
 export default function Category() {
+  const[state,formAction] = useActionState(CreateCategory,{error:null});
   return (
     <div className="p-6 space-y-4">
+      <span className="text-red-500">
+        {state?.error}
+        </span>
       <h1 className="text-xl font-bold">Category</h1>
-
+<form action={formAction}>
         <input
           type="text"
           name="name"
@@ -52,6 +59,7 @@ export default function Category() {
         >
           Create
         </button>
+        </form>
      </div>
   );
 

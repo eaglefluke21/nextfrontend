@@ -6,7 +6,8 @@ import { redirect } from "next/navigation";
 const baseurl = process.env.PHP_LOCAL_SITE_URL;
 const appId = process.env.APP_ID;
 
-export default async function loginUser(formData) {
+export default async function loginUser(prevState,formData) {
+  try{
   const email = formData.get("email");
   const password = formData.get("password");
 
@@ -20,9 +21,11 @@ export default async function loginUser(formData) {
     body: JSON.stringify({ email, password }),
   });
 
-  if (!res.ok) {
+  if (!res.ok && res.status == 500) {
     const errorText = await res.text();
     throw new Error(`HTTP Error ${res.status}: ${errorText}`);
+  }else if(!res.ok){
+    return {error: "Email or password is incorrect . Please Try again"};
   }
 
   const resData = await res.json();
@@ -48,5 +51,9 @@ export default async function loginUser(formData) {
     });
   }
 
-  redirect('/prodcut-category');
+  redirect('/product-category');
+} catch(err){
+  return {error: "Some issue occured , please try again"};
+  // throw new Error(`server Error , ${err}`);
+}
 }

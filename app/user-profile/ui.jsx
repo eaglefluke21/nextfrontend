@@ -3,23 +3,37 @@
 import { useState } from "react";
 
 export default function UserProfile() {
-  const [data, setData] = useState("");
-
+const [data, setData] = useState("");
+  const [errMsg,seterrMsg] = useState("");
+  
   async function handleProfile(e) {
-    e.preventDefault();
+    try{
+  e.preventDefault();
 
     const res = await fetch("/api/user-profile");
     const resData = await res.json();
 
     if (res.ok && resData.data) {
       setData(resData.data);
+      seterrMsg(""); 
     } else {
-      throw new Error(`Login error: ${JSON.stringify(resData)}`);
+      seterrMsg("Failed to fetch User Profile");
     }
+  
+} catch(err){
+  seterrMsg("Failed to fetch User Profile");
+  // seterrMsg(err.message);
+}
   }
-
   return (
     <div>
+      
+        {errMsg && 
+      <span className="text-red-500">
+         {errMsg}
+        </span>  
+        }
+      
       <div className="p-6">
         <button
           onClick={handleProfile}

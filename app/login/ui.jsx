@@ -1,8 +1,12 @@
 'use client';
 
 import Link from "next/link";
+import loginUser from "./action";
+import { useActionState } from "react";
 
 export default function LoginForm() {
+
+  const [state,formAction] = useActionState(loginUser,{error:null});
   return (
     <>
       <div className="p-6">
@@ -17,7 +21,13 @@ export default function LoginForm() {
         </Link>
       </div>
 
+    <div className="text-red-500">
+      {state?.error}
+    </div>
+
+
       <div>
+        <form action={formAction}>
         <div className="space-y-4">
           <div>
             <label>Email</label>
@@ -46,6 +56,7 @@ export default function LoginForm() {
             Login
           </button>
         </div>
+        </form>
       </div>
     </>
   );
