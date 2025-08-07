@@ -3,7 +3,8 @@ import { cookies } from "next/headers";
 const baseurl = process.env.PHP_LOCAL_SITE_URL;
 const appId = process.env.APP_ID;
 
-export async function POST(req) {
+export async function GET(req) {
+  try{
   const cookieStore = await cookies();
   const token = cookieStore.get("shopio")?.value;
   if(!token){
@@ -19,9 +20,12 @@ export async function POST(req) {
     const errorText = await res.text();
     throw new Error(`HTTP Error ${res.status}: ${errorText}`);
   }
-
   const resData = await res.json();
   const response = NextResponse.json(resData);
 
   return response;
+
+}catch(err){
+  throw new Error(`error occured while fetching user profile: ${err}`);
+}
 }

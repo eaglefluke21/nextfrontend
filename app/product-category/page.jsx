@@ -14,10 +14,6 @@ export default async function ProductCategoryPage() {
     const refreshToken = cookieStore.get("shopio_refresh")?.value;
 
     if (!token) {
-      // return NextResponse.json(
-      //   { error: "Unauthorized: No token found" },
-      //   { status: 401 }
-      // );
         errorMsg = "Unauthorized: No token found";
     }
 
@@ -37,6 +33,7 @@ export default async function ProductCategoryPage() {
     }
 
      json = await res.json();
+     console.log('reponse data',json);
 
     const response = NextResponse.json(json);
 

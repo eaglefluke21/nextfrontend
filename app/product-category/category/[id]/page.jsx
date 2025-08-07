@@ -28,9 +28,9 @@ export default async function CategoryPage({params}) {
 
     if (!res.ok) {
       // const errorText = await res.text();
-      errorMsg = "Faile to fetch category";
+      errorMsg = "Failed to fetch category";
     }
-    const json = await res.json();
+     json = await res.json();
     } catch (err) {
       // errorMsg = err.message;
       errorMsg = "failed to fetch category";

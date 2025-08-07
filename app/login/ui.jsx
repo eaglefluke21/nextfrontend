@@ -2,11 +2,19 @@
 
 import Link from "next/link";
 import loginUser from "./action";
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
 
-  const [state,formAction] = useActionState(loginUser,{error:null});
+  const [state,formAction] = useActionState(loginUser,{sucess:null,error:null});
+  const router = useRouter();
+  useEffect(()=>{
+    if(state.sucess){
+      router.push('/product-category');
+    }
+  },[state.sucess]);
+
   return (
     <>
       <div className="p-6">
@@ -21,6 +29,9 @@ export default function LoginForm() {
         </Link>
       </div>
 
+<div className="text-green-500">
+      {state?.sucess}
+    </div>
     <div className="text-red-500">
       {state?.error}
     </div>

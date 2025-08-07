@@ -21,7 +21,7 @@ const [data, setData] = useState("");
     }
   
 } catch(err){
-  seterrMsg("Failed to fetch User Profile");
+  seterrMsg(`Failed to fetch User Profile ${err}`);
   // seterrMsg(err.message);
 }
   }

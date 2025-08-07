@@ -29,7 +29,7 @@ export default function ProductCategoryUI({ data , error }) {
 </span>
       }
 
-{data.length > 0 &&
+{data.data.length > 0 &&
 <pre>{JSON.stringify(data, null, 2)}</pre>
    
 }

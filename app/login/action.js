@@ -1,8 +1,6 @@
 "use server";
 
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
-
 const baseurl = process.env.PHP_LOCAL_SITE_URL;
 const appId = process.env.APP_ID;
 
@@ -33,7 +31,6 @@ export default async function loginUser(prevState,formData) {
 
   const cookieStore = await cookies();
   if (resData.data.access_token && resData.data.refresh_token) {
-    console.log("log data", resData.data.refresh_token);
     cookieStore.set("shopio", resData.data.access_token, {
       httpOnly: true,
       secure: false,
@@ -50,10 +47,9 @@ export default async function loginUser(prevState,formData) {
       sameSite: "Lax",
     });
   }
-
-  redirect('/product-category');
+  return {sucess: true};
 } catch(err){
-  return {error: "Some issue occured , please try again"};
+  return {error: `Some issue occured , please try again ${err}`};
   // throw new Error(`server Error , ${err}`);
 }
 }

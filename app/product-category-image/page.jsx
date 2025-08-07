@@ -5,26 +5,30 @@ import { NextResponse } from "next/server";
 const baseurl = process.env.PHP_LOCAL_SITE_URL;
 const appId = process.env.APP_ID;
 
-export default async function ProductCategoryPage() {
+export default async function ProductCategoryPage(id) {
     let errorMsg = "";
   const cookieStore = await cookies();
   const token = cookieStore.get("shopio")?.value;
 
   if (!token) {
-    // return NextResponse.json(
-    //   { error: "Unauthorized no token found" },
-    //   { status: 401 }
-    // );
     errorMsg = "Unauthorized no token found. please log in";
   }
 
-  const res = await fetch(`${baseurl}/v1/tenant/category-image/${id}`, {
+  const res = await fetch(`${baseurl}/v1/tenant/category-image/01k21pxfep2t9g7wfj8gs85ddg`, {
     headers: {
       Authorization: `Bearer ${token}`,
       "app-id": appId,
       cache: "no-store",
     },
   });
+
+  // const res = await fetch(`${baseurl}/v1/tenant/category-image/${id}`, {
+  //   headers: {
+  //     Authorization: `Bearer ${token}`,
+  //     "app-id": appId,
+  //     cache: "no-store",
+  //   },
+  // });
 
   if (!res.ok) {
     // const errorText = await res.text();

@@ -1,12 +1,11 @@
 "use server";
 
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 
 const baseurl = process.env.PHP_LOCAL_SITE_URL;
 const appId = process.env.APP_ID;
 
-export default async function CreateCategory(formData) {
+export default async function CreateCategory(prevState,formData) {
 
      const cookieStore = await cookies();
      const token = cookieStore.get("shopio")?.value;
@@ -27,11 +26,8 @@ export default async function CreateCategory(formData) {
       });
 
     const resData = await res.json();
-
-    console.log('response',resData);
-
     if (res.ok && resData) {
-      redirect('/product-category')
+         console.log('response',resData);
     } else {
         return {error : "issue occured: please try again"};
     }
