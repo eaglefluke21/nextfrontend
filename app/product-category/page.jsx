@@ -1,45 +1,19 @@
-import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import ProductCategoryUI from "./ui";
-
-const baseurl = process.env.PHP_LOCAL_SITE_URL;
-const appId = process.env.APP_ID;
+import { NextResponse } from 'next/server';
+import ProductCategoryUI from './ui';
+import getProductCategories from '@/lib/api/getProductCategories';
 
 export default async function ProductCategoryPage() {
-  let errorMsg ="";
+  let errorMsg = '';
   let json = {};
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("shopio")?.value;
-    const refreshToken = cookieStore.get("shopio_refresh")?.value;
-
-    if (!token) {
-        errorMsg = "Unauthorized: No token found";
-    }
-
-    const res = await fetch(`${baseurl}/v1/tenant/categories`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "app-id": appId,
-        "X-Refresh-Token": refreshToken,
-      },
-      credentials: "include",
-      cache: "no-store",
-    });
-
-    if (!res.ok) {
-      // const errorText = await res.text();
-      errorMsg = "Failed to fetch product category";
-    }
-
-     json = await res.json();
-     console.log('reponse data',json);
-
+    
+    const{data,error} = getProductCategories();
+    json = data;
+    errorMsg = error;
     const response = NextResponse.json(json);
 
-    // If token was refreshed, send tokens to client so it can set them
-    if (res.status === 200 && json.message === "Token refreshed") {
-      response.headers.set("x-refreshed", "true");
+    if (res.status === 200 && json.message === 'Token refreshed') {
+      response.headers.set('x-refreshed', 'true');
       json.refreshed = true;
       json.newTokens = {
         access_token: json.data.access_token,
@@ -47,8 +21,7 @@ export default async function ProductCategoryPage() {
       };
     }
   } catch (err) {
-    errorMsg = "serve error : product category ";
-    // errorMsg = err.message;
+    errorMsg = 'serve error : product category ';
   }
 
   return (
