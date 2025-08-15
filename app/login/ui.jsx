@@ -11,7 +11,7 @@ export default function LoginForm() {
   const router = useRouter();
   useEffect(()=>{
     if(state.sucess){
-      router.push('/product-category');
+      router.push('/user-profile');
     }
   },[state.sucess]);
 
