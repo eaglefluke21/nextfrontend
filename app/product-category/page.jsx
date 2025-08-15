@@ -3,13 +3,13 @@ import ProductCategoryUI from './ui';
 import getProductCategories from '@/lib/api/getProductCategories';
 
 export default async function ProductCategoryPage() {
-  let errorMsg = '';
-  let json = {};
+ let errorMsg = '';
+ let json = {}
   try {
     
     const{data,error} = getProductCategories();
-    json = data;
-    errorMsg = error;
+     json = data;
+     errorMsg = error;
     const response = NextResponse.json(json);
 
     if (res.status === 200 && json.message === 'Token refreshed') {

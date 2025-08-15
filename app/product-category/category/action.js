@@ -29,7 +29,7 @@ export default async function CreateCategory(prevState,formData) {
     if (res.ok && resData) {
          console.log('response',resData);
     } else {
-        return {error : "issue occured: please try again"};
+        return {error : `issue occured: please try again `};
     }
   };
 
