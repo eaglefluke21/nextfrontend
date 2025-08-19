@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import { NextResponse } from "next/server";
 
 const baseurl = process.env.PHP_LOCAL_SITE_URL;
 const appId = process.env.APP_ID;
@@ -9,43 +10,33 @@ export async function GET() {
   const refreshToken = cookieStore.get("shopio_refresh")?.value;
 
   if (!token || !refreshToken) {
-    return new Response(
-      ` api/refresh Missing tokens ${token} ${refreshToken}`,
-      { status: 401 }
-    );
+    return NextResponse.json({ error: "Missing tokens" }, { status: 401 });
   }
+  try {
+   const res = await fetch(`${baseurl}/v1/auth/refresh-token`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "app-id": appId,
+        "X-Refresh-Token": refreshToken,
+      },
+      cache: "no-store",
+    });
 
-  const res = await fetch(`${baseurl}/v1/auth/refresh-token`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "app-id": appId,
-      "X-Refresh-Token": refreshToken,
-    },
-    cache: "no-store",
-  });
+    const  resData = await res.json();
 
-  if (!res.ok) {
-    const message = await res.text();
-    return new Response(` api/refresh Failed ${message}`, { status: 401 });
-  }
-
-  const resData = await res.json();
+    const response = NextResponse.json(resData, { status: res.status });
+    console.log('resData in api/refresh',resData);
 
   if (resData.data?.access_token && resData.data?.refresh_token) {
-    cookieStore.set("shopio", resData.data.access_token, {
-      httpOnly: true,
-      path: "/",
-      maxAge: 60 * 60 * 24,
-      sameSite: "Lax"
-    });
-
-    cookieStore.set("shopio_refresh", resData.data.refresh_token, {
-      httpOnly: true,
-      path: "/",
-      maxAge: 60 * 60 * 24 * 7,
-      sameSite: "Lax"
-    });
+    const cookieOptions = { httpOnly: true, secure: false, path: "/", maxAge: 86400, sameSite: "Lax" };
+    response.cookies.set("shopio", resData.data.access_token, cookieOptions);
+    response.cookies.set("shopio_refresh", resData.data.refresh_token, cookieOptions);
+    console.log('cookies set');
   }
-
-  return Response.json(resData);
+console.log('returning response');
+  return response;
+  
+  } catch (err) {
+    return NextResponse.json({ error: "Backend fetch failed", details: err.message }, { status: 500 });
+  }
 }

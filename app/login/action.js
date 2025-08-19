@@ -36,7 +36,7 @@ export default async function loginUser(prevState, formData) {
         secure: false,
         path: "/",
         maxAge: 60 * 60 * 24,
-        sameSite: "Lax",
+        sameSite: "Lax"
       });
 
       cookieStore.set("shopio_refresh", resData.data.refresh_token, {
@@ -44,7 +44,7 @@ export default async function loginUser(prevState, formData) {
         secure: false,
         path: "/",
         maxAge: 60 * 60 * 24,
-        sameSite: "Lax",
+        sameSite: "Lax"
       });
     }
     return { sucess: true };

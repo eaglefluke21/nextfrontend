@@ -15,6 +15,12 @@ export default async function CreateCategory(prevState,formData) {
       }
     
       formData.append("parent_id", "");
+      formData.set("featured", formData.get("featured") === "on" ? 1 : 0);
+      formData.set("featured", formData.get("publish") === "on" ? 1 : 0);
+
+
+
+      console.log('formdata product category',formData);
     
       const res = await fetch(`${baseurl}/v1/tenant/category`, {
         method: "POST",
@@ -25,11 +31,16 @@ export default async function CreateCategory(prevState,formData) {
         body: formData,
       });
 
-    const resData = await res.json();
-    if (res.ok && resData) {
-         console.log('response',resData);
-    } else {
-        return {error : `issue occured: please try again `};
+    
+    if(!res.ok){
+     const message = await res.text();
+     return {error : `issue occured please try again. ${message}`};
     }
+    
+    if (res.ok) {
+      const resData = await res.json();
+      console.log('response',resData);
+    }
+     
   };
 

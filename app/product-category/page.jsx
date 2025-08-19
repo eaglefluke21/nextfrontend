@@ -1,25 +1,27 @@
-import { NextResponse } from 'next/server';
 import ProductCategoryUI from './ui';
-import getProductCategories from '@/lib/api/getProductCategories';
+import ClientRefreshBoundary from '@/lib/components/clientRefreshBoundary';
+import { fetchWithAuth } from '@/lib/fetch/fetchwithAuth';
+const baseurl = process.env.PHP_LOCAL_SITE_URL;
 
 export default async function ProductCategoryPage() {
  let errorMsg = '';
- let json = {}
+ let json = {};
+ let shouldRefresh = false;
   try {
-    
-    const{data,error} = getProductCategories();
-     json = data;
-     errorMsg = error;
-    const response = NextResponse.json(json);
+    console.log('in product-category page');
 
-    if (res.status === 200 && json.message === 'Token refreshed') {
-      response.headers.set('x-refreshed', 'true');
-      json.refreshed = true;
-      json.newTokens = {
-        access_token: json.data.access_token,
-        refresh_token: json.data.refresh_token,
-      };
-    }
+    const{res, shouldClientRefresh} = await fetchWithAuth(`${baseurl}/v1/tenant/categories`, {
+      cache: 'no-store'
+    });
+
+     shouldRefresh = shouldClientRefresh;
+
+     if(!res.ok){
+      errorMsg = 'Failed to fetch product category';
+     }else{
+      json = await res.json();
+     }
+     console.log('should refresh value', typeof(shouldRefresh),shouldRefresh);
   } catch (err) {
     errorMsg = 'serve error : product category ';
   }
@@ -28,6 +30,7 @@ export default async function ProductCategoryPage() {
     <div className="p-6">
       <h1 className="text-xl font-bold mb-4">Product Category</h1>
       <ProductCategoryUI data={json} error={errorMsg} />
+      <ClientRefreshBoundary shouldRefresh={shouldRefresh}/>
     </div>
   );
 }
